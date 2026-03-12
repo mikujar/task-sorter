@@ -1,0 +1,235 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #333;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.app-header p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.add-task-form {
+  display: flex;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.task-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  transition: border-color 0.2s;
+  min-width: 0;
+}
+
+.task-input-desc {
+  flex: 1.2;
+}
+
+.task-input:focus {
+  outline: none;
+  border-color: #333;
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  background: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-button:hover {
+  background: #555;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .board {
+    grid-template-columns: 1fr;
+  }
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.container-over {
+  border-color: #333;
+}
+
+.container-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: #fafafa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.container-header svg {
+  color: #666;
+}
+
+.container-header h2 {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.task-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #666;
+  background: #e8e8e8;
+}
+
+.task-list {
+  padding: 12px;
+  min-height: 300px;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #999;
+  font-size: 0.9rem;
+  border: 1px dashed #ddd;
+  border-radius: 8px;
+  margin: 4px;
+}
+
+.task-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.task-card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  background: #fafafa;
+  border-radius: 8px;
+  cursor: grab;
+  transition: background 0.2s;
+  border: 1px solid #eee;
+}
+
+.task-card:hover {
+  background: #f0f0f0;
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.task-card-content {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.task-description {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #ccc;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.delete-button:hover {
+  background: #fee;
+  color: #e55;
+}
+
+.arrow-connector {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0;
+  color: #ccc;
+}
+
+[data-dnd-dragging="true"] {
+  opacity: 0.5;
+}
