@@ -39,12 +39,31 @@ body {
   gap: 12px;
   max-width: 600px;
   margin: 0 auto 32px;
+  padding: 0 16px;
 }
 
 .input-group {
   flex: 1;
   display: flex;
   gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .add-task-form {
+    flex-direction: column;
+  }
+  
+  .input-group {
+    flex-direction: column;
+  }
+  
+  .task-input-desc {
+    flex: 1;
+  }
+  
+  .add-button {
+    justify-content: center;
+  }
 }
 
 .task-input {
