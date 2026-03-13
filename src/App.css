@@ -12,7 +12,7 @@ body {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px;
 }
@@ -107,8 +107,14 @@ body {
 
 .board {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .board {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -117,7 +123,8 @@ body {
   }
 }
 
-.container {
+.container,
+.timeline-container {
   background: white;
   border-radius: 12px;
   border: 1px solid #e0e0e0;
@@ -208,6 +215,7 @@ body {
 
 .task-card-content {
   flex: 1;
+  min-width: 0;
 }
 
 .task-title {
@@ -222,6 +230,13 @@ body {
   color: #888;
 }
 
+.task-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.complete-button,
 .delete-button {
   display: flex;
   align-items: center;
@@ -237,6 +252,11 @@ body {
   flex-shrink: 0;
 }
 
+.complete-button:hover {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
 .delete-button:hover {
   background: #fee;
   color: #e55;
@@ -247,6 +267,88 @@ body {
   justify-content: center;
   padding: 2px 0;
   color: #ccc;
+}
+
+/* Timeline styles */
+.timeline-list {
+  padding: 12px;
+  min-height: 300px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 24px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: #e0e0e0;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 16px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -24px;
+  top: 8px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #4caf50;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px #e0e0e0;
+}
+
+.timeline-content {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #eee;
+}
+
+.timeline-task {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.timeline-task-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-task .task-title {
+  font-size: 0.9rem;
+}
+
+.timeline-task .task-description {
+  font-size: 0.8rem;
+}
+
+.timeline-time {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.timeline-task .delete-button {
+  width: 24px;
+  height: 24px;
 }
 
 [data-dnd-dragging="true"] {

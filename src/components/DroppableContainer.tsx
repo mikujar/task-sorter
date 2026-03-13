@@ -13,6 +13,7 @@ interface DroppableContainerProps {
   showArrows?: boolean;
   icon: React.ReactNode;
   onDeleteTask?: (id: string) => void;
+  onCompleteTask?: (id: string) => void;
 }
 
 export function DroppableContainer({
@@ -22,6 +23,7 @@ export function DroppableContainer({
   showArrows = false,
   icon,
   onDeleteTask,
+  onCompleteTask,
 }: DroppableContainerProps) {
   const { setNodeRef, isOver } = useDroppable({ id });
 
@@ -41,7 +43,11 @@ export function DroppableContainer({
           ) : (
             tasks.map((task, index) => (
               <div key={task.id} className="task-wrapper">
-                <TaskCard task={task} onDelete={onDeleteTask} />
+                <TaskCard 
+                  task={task} 
+                  onDelete={onDeleteTask} 
+                  onComplete={onCompleteTask}
+                />
                 {showArrows && index < tasks.length - 1 && (
                   <div className="arrow-connector">
                     <svg width="24" height="32" viewBox="0 0 24 32">

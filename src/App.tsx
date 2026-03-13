@@ -15,6 +15,7 @@ import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
 import { DroppableContainer } from './components/DroppableContainer';
 import { TaskCard } from './components/TaskCard';
 import { AddTaskForm } from './components/AddTaskForm';
+import { Timeline } from './components/Timeline';
 import type { Task, ContainerId } from './types';
 import './App.css';
 
@@ -53,12 +54,16 @@ function App() {
     const saved = loadFromStorage();
     return saved?.sortedTasks ?? defaultSortedTasks;
   });
+  const [completedTasks, setCompletedTasks] = useState<Task[]>(() => {
+    const saved = loadFromStorage();
+    return saved?.completedTasks ?? [];
+  });
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   useEffect(() => {
-    const data = { inboxTasks, sortedTasks };
+    const data = { inboxTasks, sortedTasks, completedTasks };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }, [inboxTasks, sortedTasks]);
+  }, [inboxTasks, sortedTasks, completedTasks]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -163,6 +168,21 @@ function App() {
   const handleDeleteTask = (id: string) => {
     setInboxTasks((tasks) => tasks.filter((t) => t.id !== id));
     setSortedTasks((tasks) => tasks.filter((t) => t.id !== id));
+    setCompletedTasks((tasks) => tasks.filter((t) => t.id !== id));
+  };
+
+  const handleCompleteTask = (id: string) => {
+    const task = findTask(id);
+    if (!task) return;
+
+    const completedTask: Task = {
+      ...task,
+      completedAt: new Date().toISOString(),
+    };
+
+    setInboxTasks((tasks) => tasks.filter((t) => t.id !== id));
+    setSortedTasks((tasks) => tasks.filter((t) => t.id !== id));
+    setCompletedTasks((tasks) => [completedTask, ...tasks]);
   };
 
   return (
@@ -187,6 +207,7 @@ function App() {
             title="收集箱"
             tasks={inboxTasks}
             onDeleteTask={handleDeleteTask}
+            onCompleteTask={handleCompleteTask}
             icon={
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path
@@ -205,6 +226,7 @@ function App() {
             tasks={sortedTasks}
             showArrows
             onDeleteTask={handleDeleteTask}
+            onCompleteTask={handleCompleteTask}
             icon={
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path
@@ -216,10 +238,11 @@ function App() {
               </svg>
             }
           />
+          <Timeline tasks={completedTasks} onDelete={handleDeleteTask} />
         </div>
 
         <DragOverlay>
-          {activeTask ? <TaskCard task={activeTask} isDragging /> : null}
+          {activeTask ? <TaskCard task={activeTask} isDragging showActions={false} /> : null}
         </DragOverlay>
       </DndContext>
     </div>

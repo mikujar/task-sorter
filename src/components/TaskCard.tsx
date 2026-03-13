@@ -6,9 +6,11 @@ interface TaskCardProps {
   task: Task;
   isDragging?: boolean;
   onDelete?: (id: string) => void;
+  onComplete?: (id: string) => void;
+  showActions?: boolean;
 }
 
-export function TaskCard({ task, isDragging, onDelete }: TaskCardProps) {
+export function TaskCard({ task, isDragging, onDelete, onComplete, showActions = true }: TaskCardProps) {
   const {
     attributes,
     listeners,
@@ -21,6 +23,11 @@ export function TaskCard({ task, isDragging, onDelete }: TaskCardProps) {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+  };
+
+  const handleComplete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onComplete?.(task.id);
   };
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -42,17 +49,34 @@ export function TaskCard({ task, isDragging, onDelete }: TaskCardProps) {
           <p className="task-description">{task.description}</p>
         )}
       </div>
-      {onDelete && (
-        <button className="delete-button" onClick={handleDelete}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M4 4L12 12M12 4L4 12"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+      {showActions && (
+        <div className="task-actions">
+          {onComplete && (
+            <button className="complete-button" onClick={handleComplete} title="完成任务">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 8L6.5 11.5L13 4.5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          )}
+          {onDelete && (
+            <button className="delete-button" onClick={handleDelete} title="删除任务">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M4 4L12 12M12 4L4 12"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

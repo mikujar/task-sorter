@@ -2,6 +2,7 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
+  completedAt?: string;
 }
 
-export type ContainerId = 'inbox' | 'sorted';
+export type ContainerId = 'inbox' | 'sorted' | 'completed';
