@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -18,22 +18,47 @@ import { AddTaskForm } from './components/AddTaskForm';
 import type { Task, ContainerId } from './types';
 import './App.css';
 
-const initialInboxTasks: Task[] = [
+const STORAGE_KEY = 'task-sorter-data';
+
+const defaultInboxTasks: Task[] = [
   { id: '1', title: '学习 React', description: '深入理解 Hooks' },
   { id: '2', title: '写文档', description: '完善项目文档' },
   { id: '3', title: '代码审查', description: '审查团队 PR' },
   { id: '4', title: '修复 Bug', description: '处理用户反馈的问题' },
 ];
 
-const initialSortedTasks: Task[] = [
+const defaultSortedTasks: Task[] = [
   { id: '5', title: '需求分析', description: '整理产品需求' },
   { id: '6', title: '技术方案', description: '设计技术架构' },
 ];
 
+function loadFromStorage() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error('Failed to load data from localStorage:', e);
+  }
+  return null;
+}
+
 function App() {
-  const [inboxTasks, setInboxTasks] = useState<Task[]>(initialInboxTasks);
-  const [sortedTasks, setSortedTasks] = useState<Task[]>(initialSortedTasks);
+  const [inboxTasks, setInboxTasks] = useState<Task[]>(() => {
+    const saved = loadFromStorage();
+    return saved?.inboxTasks ?? defaultInboxTasks;
+  });
+  const [sortedTasks, setSortedTasks] = useState<Task[]>(() => {
+    const saved = loadFromStorage();
+    return saved?.sortedTasks ?? defaultSortedTasks;
+  });
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+  useEffect(() => {
+    const data = { inboxTasks, sortedTasks };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }, [inboxTasks, sortedTasks]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
