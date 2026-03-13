@@ -1,3 +1,4 @@
+import { useI18n } from '../i18n';
 import type { Task } from '../types';
 
 interface TimelineProps {
@@ -5,35 +6,37 @@ interface TimelineProps {
   onDelete: (id: string) => void;
 }
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const isToday = date.toDateString() === now.toDateString();
-  
-  const yesterday = new Date(now);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const isYesterday = date.toDateString() === yesterday.toDateString();
-
-  const timeStr = date.toLocaleTimeString('zh-CN', { 
-    hour: '2-digit', 
-    minute: '2-digit' 
-  });
-
-  if (isToday) {
-    return `今天 ${timeStr}`;
-  } else if (isYesterday) {
-    return `昨天 ${timeStr}`;
-  } else {
-    return date.toLocaleDateString('zh-CN', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-}
-
 export function Timeline({ tasks, onDelete }: TimelineProps) {
+  const { t, lang } = useI18n();
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday = date.toDateString() === yesterday.toDateString();
+
+    const timeStr = date.toLocaleTimeString(lang === 'zh' ? 'zh-CN' : 'en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+
+    if (isToday) {
+      return `${t.today} ${timeStr}`;
+    } else if (isYesterday) {
+      return `${t.yesterday} ${timeStr}`;
+    } else {
+      return date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+  };
+
   const sortedTasks = [...tasks].sort((a, b) => {
     return new Date(b.completedAt!).getTime() - new Date(a.completedAt!).getTime();
   });
@@ -45,13 +48,13 @@ export function Timeline({ tasks, onDelete }: TimelineProps) {
           <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
           <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         </svg>
-        <h2>时间轴</h2>
+        <h2>{t.timeline}</h2>
         <span className="task-count">{tasks.length}</span>
       </div>
       <div className="timeline-list">
         {tasks.length === 0 ? (
           <div className="empty-state">
-            完成任务后会显示在这里
+            {t.emptyTimeline}
           </div>
         ) : (
           <div className="timeline">
@@ -69,7 +72,7 @@ export function Timeline({ tasks, onDelete }: TimelineProps) {
                     <button 
                       className="delete-button" 
                       onClick={() => onDelete(task.id)}
-                      title="删除记录"
+                      title={t.deleteRecord}
                     >
                       <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                         <path

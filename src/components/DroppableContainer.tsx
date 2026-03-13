@@ -4,6 +4,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { TaskCard } from './TaskCard';
+import { useI18n } from '../i18n';
 import type { Task, ContainerId } from '../types';
 
 interface DroppableContainerProps {
@@ -25,7 +26,10 @@ export function DroppableContainer({
   onDeleteTask,
   onCompleteTask,
 }: DroppableContainerProps) {
+  const { t } = useI18n();
   const { setNodeRef, isOver } = useDroppable({ id });
+
+  const emptyText = id === 'inbox' ? t.emptyInbox : t.emptySorted;
 
   return (
     <div className={`container ${isOver ? 'container-over' : ''}`}>
@@ -38,7 +42,7 @@ export function DroppableContainer({
         <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
           {tasks.length === 0 ? (
             <div className="empty-state">
-              {id === 'inbox' ? '拖拽任务到这里' : '从收集箱拖拽任务来排序'}
+              {emptyText}
             </div>
           ) : (
             tasks.map((task, index) => (

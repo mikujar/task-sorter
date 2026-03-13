@@ -16,6 +16,8 @@ import { DroppableContainer } from './components/DroppableContainer';
 import { TaskCard } from './components/TaskCard';
 import { AddTaskForm } from './components/AddTaskForm';
 import { Timeline } from './components/Timeline';
+import { LanguageSwitch } from './components/LanguageSwitch';
+import { useI18n } from './i18n';
 import type { Task, ContainerId } from './types';
 import './App.css';
 
@@ -46,6 +48,7 @@ function loadFromStorage() {
 }
 
 function App() {
+  const { t } = useI18n();
   const [inboxTasks, setInboxTasks] = useState<Task[]>(() => {
     const saved = loadFromStorage();
     return saved?.inboxTasks ?? defaultInboxTasks;
@@ -187,9 +190,10 @@ function App() {
 
   return (
     <div className="app">
+      <LanguageSwitch />
       <header className="app-header">
-        <h1>任务排序器</h1>
-        <p>拖拽卡片来整理你的任务优先级</p>
+        <h1>{t.appTitle}</h1>
+        <p>{t.appSubtitle}</p>
       </header>
 
       <AddTaskForm onAdd={handleAddTask} />
@@ -204,7 +208,7 @@ function App() {
         <div className="board">
           <DroppableContainer
             id="inbox"
-            title="收集箱"
+            title={t.inbox}
             tasks={inboxTasks}
             onDeleteTask={handleDeleteTask}
             onCompleteTask={handleCompleteTask}
@@ -222,7 +226,7 @@ function App() {
           />
           <DroppableContainer
             id="sorted"
-            title="排序任务"
+            title={t.sorted}
             tasks={sortedTasks}
             showArrows
             onDeleteTask={handleDeleteTask}

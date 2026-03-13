@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useI18n } from '../i18n';
 
 interface AddTaskFormProps {
   onAdd: (title: string, description?: string) => void;
 }
 
 export function AddTaskForm({ onAdd }: AddTaskFormProps) {
+  const { t } = useI18n();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -24,14 +26,14 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="任务标题"
+          placeholder={t.addTaskPlaceholder}
           className="task-input"
         />
         <input
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="任务描述（可选）"
+          placeholder={t.addDescPlaceholder}
           className="task-input task-input-desc"
         />
       </div>
@@ -44,7 +46,7 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
             strokeLinecap="round"
           />
         </svg>
-        添加
+        {t.add}
       </button>
     </form>
   );
