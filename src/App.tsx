@@ -35,6 +35,12 @@ const defaultSortedTasks: Task[] = [
   { id: '6', title: '技术方案', description: '设计技术架构' },
 ];
 
+const defaultCompletedTasks: Task[] = [
+  { id: '7', title: '项目初始化', description: '搭建项目框架', completedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() },
+  { id: '8', title: '设计稿评审', description: '确认 UI 设计方案', completedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() },
+  { id: '9', title: '环境配置', description: '配置开发环境', completedAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString() },
+];
+
 function loadFromStorage() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
@@ -59,7 +65,7 @@ function App() {
   });
   const [completedTasks, setCompletedTasks] = useState<Task[]>(() => {
     const saved = loadFromStorage();
-    return saved?.completedTasks ?? [];
+    return saved?.completedTasks ?? defaultCompletedTasks;
   });
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
